@@ -91,15 +91,15 @@ public struct NavigationStackStore<State, Action, Root: View, Destination: View>
 
   public var body: some View {
     NavigationStack(
-      path: self.viewStore.binding(
-        get: { $0.path },
-        send: { newPath in
-          if newPath.count > self.viewStore.path.count, let component = newPath.last {
-            return .push(id: component.id, state: component.element)
-          } else {
-            return .popFrom(id: self.viewStore.path[newPath.count].id)
-          }
-        }
+        path: .init(
+            get: { viewStore.path },
+            set: { newPath in
+                if newPath.count > self.viewStore.path.count, let component = newPath.last {
+                    self.viewStore.send(.push(id: component.id, state: component.element))
+                } else if !viewStore.path.isEmpty {
+                    self.viewStore.send(.popFrom(id: self.viewStore.path[newPath.count].id))
+                }
+            }
       )
     ) {
       self.root
