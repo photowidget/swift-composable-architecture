@@ -91,6 +91,8 @@ public struct NavigationStackStore<State, Action, Root: View, Destination: View>
   }
   
   public var body: some View {
+      // 원본의 TCA와 다르게, NavigationStack2로 대체하여, SwiftUIBackport.NavigationController를 사용하게 된다.
+      // 이를 통하여, UIKit도 동시지원 가능 함.
     NavigationStack2(
       path: self.viewStore.binding(
         get: { $0.path.map { $0 } },
@@ -310,6 +312,7 @@ extension EnvironmentValues {
 
 // MARK: - UIKit
 
+/// PhotoWidgetPackage.SwiftUIBackport.NavigationController에 StackStore를 추가하여 UIKit에서 사용 할 수 있도록 함.
 public final class NavigationStackStoreController<
   State,
   Action,
