@@ -261,7 +261,11 @@ extension StackState {
     var endIndex: Int { self.base.endIndex }
     func index(after i: Int) -> Int { self.base.index(after: i) }
     func index(before i: Int) -> Int { self.base.index(before: i) }
-    
+        
+      subscript(safe index: Int) -> Component<Element>? {
+          self.base.indices ~= index ? self[index] : nil
+      }
+      
     subscript(position: Int) -> Component<Element> {
       _read {
         yield Component(id: self.base.ids[position], element: self.base[position])
@@ -372,12 +376,41 @@ public final class NavigationStackStoreController<
     
     Task { @MainActor in
       for await data in dataStream {
-        if data.count > self.viewStore.path.count, let component = data.last {
+        if 
+          data.count > self.viewStore.path.count,
+          let component = data.last
+        {
           viewStore.send(.push(id: component.id, state: component.element))
-        } else if !viewStore.path.isEmpty {
-          viewStore.send(.popFrom(id: self.viewStore.path[data.count].id))
         }
+        else if
+          !viewStore.path.isEmpty,
+          data.count < self.viewStore.path.count,
+          let id = self.viewStore.path[safe: data.count]?.id
+        {
+              viewStore.send(.popFrom(id: id))
+        }
+        else if
+          !viewStore.path.isEmpty,
+          data.count >= 1,
+          viewStore.path.count != data.count
+            // 해당 케이스는 발생하지 않을 것이라 예상하고 만들어진 케이스
+            //
+        {
+
+//            아래 코드를 통해서 state의 정보를 남기려 하였으나,
+//            base의 value TYPE이 generic이므로, 접근을 포기함.
+//            let ids = viewStore.path.base.ids
+//            
+//            ids.forEach { id in
+//                self.viewStore.path.base[id: id]
+//            }
+            
+            assertionFailure("NavigationStackStore Logic Failure, ")
+        }
+          // 위 케이스를 전부 지나면, data.count == viewStore.path.count가 같은 경우만 남을 것
       }
     }
   }
+    
 }
+
