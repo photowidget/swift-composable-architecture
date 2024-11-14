@@ -127,15 +127,6 @@
       }
     },
     {
-      "identity" : "swiftuibackport",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/photowidget/SwiftUIBackport",
-      "state" : {
-        "branch" : "main",
-        "revision" : "606675759f4cecb9f88875892fc2ce17c13f95d6"
-      }
-    },
-    {
       "identity" : "xctest-dynamic-overlay",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pointfreeco/xctest-dynamic-overlay",

@@ -5,7 +5,7 @@ import PackageDescription
 let package = Package(
   name: "swift-composable-architecture",
   platforms: [
-    .iOS(.v14),
+    .iOS(.v16),
     .macOS(.v10_15),
     .tvOS(.v13),
     .watchOS(.v7),
@@ -27,7 +27,6 @@ let package = Package(
     .package(url: "https://github.com/pointfreeco/swift-identified-collections", from: "0.7.0"),
     .package(url: "https://github.com/pointfreeco/swiftui-navigation", from: "0.8.0"),
     .package(url: "https://github.com/pointfreeco/xctest-dynamic-overlay", from: "0.8.4"),
-    .package(url: "https://github.com/photowidget/SwiftUIBackport", branch: "main"),
   ],
   targets: [
     .target(
@@ -41,7 +40,6 @@ let package = Package(
         .product(name: "OrderedCollections", package: "swift-collections"),
         .product(name: "SwiftUINavigationCore", package: "swiftui-navigation"),
         .product(name: "XCTestDynamicOverlay", package: "xctest-dynamic-overlay"),
-        "SwiftUIBackport",
       ]
     ),
     .testTarget(
@@ -59,15 +57,3 @@ let package = Package(
     ),
   ]
 )
-
-//for target in package.targets where target.type != .system {
-//  target.swiftSettings = target.swiftSettings ?? []
-//  target.swiftSettings?.append(
-//    .unsafeFlags([
-//      "-c", "release",
-//      "-emit-module-interface", "-enable-library-evolution",
-//      "-Xfrontend", "-warn-concurrency",
-//      "-Xfrontend", "-enable-actor-data-race-checks",
-//    ])
-//  )
-//}

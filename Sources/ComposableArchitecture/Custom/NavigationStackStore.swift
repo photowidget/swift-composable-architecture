@@ -1,6 +1,5 @@
 import OrderedCollections
 import SwiftUI
-import SwiftUIBackport
 import Combine
 
 /// A navigation stack that is driven by a store.
